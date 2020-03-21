@@ -60,6 +60,10 @@ void loop() {
 void setInitialGameState() {
   Serial.write("In initial game state\n");
   setLedColorBlue();
+  // play tones to signify game start
+  tone(PIN_BUZZER, 975, 500);
+  delay(500);
+  noTone(PIN_BUZZER);
 }
 
 /**
@@ -119,7 +123,7 @@ void changeStateToFailed() {
   delay(500);
   tone(PIN_BUZZER, 925, 500);
   delay(500);
-  tone(PIN_BUZZER, 850, 500);
+  tone(PIN_BUZZER, 850, 800);
   delay(800);
   noTone(PIN_BUZZER);
 }
@@ -131,6 +135,16 @@ void changeStateToSuccess() {
   gameState = GameState::SUCCESS;
   Serial.write("State set to success\n");
   setLedColorGreen();
+
+  tone(PIN_BUZZER, 850, 500);
+  delay(500);
+  tone(PIN_BUZZER, 925, 500);
+  delay(500);
+  tone(PIN_BUZZER, 1000, 500);
+  delay(500);
+  tone(PIN_BUZZER, 1200, 800);
+  delay(800);
+  noTone(PIN_BUZZER);
 }
 
 void setLedColorYellow() {

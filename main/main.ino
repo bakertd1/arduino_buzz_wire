@@ -58,6 +58,7 @@ void loop() {
  * Set everything up for the initial game state
  */
 void setInitialGameState() {
+  Serial.write("In initial game state\n");
   setLedColorBlue();
 }
 
@@ -69,6 +70,7 @@ void listenForGameReset() {
   // check to see if the loop is touching the start zone
   if (!digitalRead(PIN_START_ZONE)) {
     // the loop is touching the start zone so change the game start
+    Serial.write("Game reset\n");
     changeStateToInProgress();
   }
 }
@@ -80,15 +82,18 @@ void loopInProgressGameState() {
   // listen for a game state change
   if (!digitalRead(PIN_END_ZONE)) {
     // the loop is touching the end zone so the player was successful
+    Serial.write("Player won\n");
     changeStateToSuccess();
   } else if (!digitalRead(PIN_FAIL_ZONE)) {
     // the loop touched the pipe so the player was unsuccessful
+    Serial.write("Player lost\n");
     changeStateToFailed();
   }
 }
 
 void changeStateToInProgress() {
   gameState = GameState::IN_PROGRESS;
+  Serial.write("State set to in progress\n");
   setLedColorYellow();
 
   // play tones to signify game start
@@ -101,6 +106,7 @@ void changeStateToInProgress() {
 
 void changeStateToFailed() {
   gameState = GameState::FAILED;
+  Serial.write("State set to failed\n");
   setLedColorRed();
 
   tone(PIN_BUZZER, 1000, 500);
@@ -114,6 +120,7 @@ void changeStateToFailed() {
 
 void changeStateToSuccess() {
   gameState = GameState::SUCCESS;
+  Serial.write("State set to success\n");
   setLedColorGreen();
 }
 

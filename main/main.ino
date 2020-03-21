@@ -91,6 +91,9 @@ void loopInProgressGameState() {
   }
 }
 
+/**
+ * Call this when the loop is in the start zone while a game isn't already in progress
+ */
 void changeStateToInProgress() {
   gameState = GameState::IN_PROGRESS;
   Serial.write("State set to in progress\n");
@@ -104,6 +107,9 @@ void changeStateToInProgress() {
   noTone(PIN_BUZZER);
 }
 
+/**
+ * Call this when the loop has touched the pipe and the game state is in progress
+ */
 void changeStateToFailed() {
   gameState = GameState::FAILED;
   Serial.write("State set to failed\n");
@@ -118,6 +124,9 @@ void changeStateToFailed() {
   noTone(PIN_BUZZER);
 }
 
+/**
+ * Call this when the loop has touched the pipe and the game state is in progress
+ */
 void changeStateToSuccess() {
   gameState = GameState::SUCCESS;
   Serial.write("State set to success\n");

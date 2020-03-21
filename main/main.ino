@@ -109,6 +109,9 @@ void changeStateToInProgress() {
   tone(PIN_BUZZER, 1210, 800);
   delay(800);
   noTone(PIN_BUZZER);
+
+  delay(500);
+  setLedColorOff();
 }
 
 /**
@@ -136,19 +139,23 @@ void changeStateToSuccess() {
   Serial.write("State set to success\n");
   setLedColorGreen();
 
-  tone(PIN_BUZZER, 850, 500);
-  delay(500);
-  tone(PIN_BUZZER, 925, 500);
-  delay(500);
-  tone(PIN_BUZZER, 1000, 500);
-  delay(500);
-  tone(PIN_BUZZER, 1200, 800);
+  tone(PIN_BUZZER, 1200, 200);
+  delay(250);
+  tone(PIN_BUZZER, 1200, 200);
+  delay(250);
+  tone(PIN_BUZZER, 1200, 200);
+  delay(250);
+  tone(PIN_BUZZER, 1600, 500);
+  delay(550);
+  tone(PIN_BUZZER, 1200, 200);
+  delay(250);
+  tone(PIN_BUZZER, 1600, 800);
   delay(800);
   noTone(PIN_BUZZER);
 }
 
 void setLedColorYellow() {
-  setLedColor(50, 5, 0);
+  setLedColor(255, 25, 0);
 }
 
 void setLedColorRed() {

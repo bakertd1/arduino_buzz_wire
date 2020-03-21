@@ -146,9 +146,9 @@ void changeStateToSuccess() {
   tone(PIN_BUZZER, 1200, 200);
   delay(250);
   tone(PIN_BUZZER, 1600, 500);
-  delay(550);
+  delay(500);
   tone(PIN_BUZZER, 1200, 200);
-  delay(250);
+  delay(225);
   tone(PIN_BUZZER, 1600, 800);
   delay(800);
   noTone(PIN_BUZZER);

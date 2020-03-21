@@ -1,9 +1,144 @@
-void setup() {
-  // put your setup code here, to run once:
+enum GameState {
+  INITIAL,
+  FAILED,
+  IN_PROGRESS,
+  SUCCESS
+};
 
+const byte PIN_LED_RED = 11;
+const byte PIN_LED_GREEN = 10;
+const byte PIN_LED_BLUE = 9;
+
+const byte PIN_BUZZER = 3;
+
+const byte PIN_START_ZONE = 4;
+const byte PIN_FAIL_ZONE = 5;
+const byte PIN_END_ZONE = 6;
+
+GameState gameState = GameState::INITIAL;
+
+void setup() {
+  // establish pins for the RGB LED
+  pinMode(PIN_LED_RED, OUTPUT);
+  pinMode(PIN_LED_GREEN, OUTPUT);
+  pinMode(PIN_LED_BLUE, OUTPUT);
+
+  // establish pin for the buzzer
+  pinMode(PIN_BUZZER, OUTPUT);
+
+  // establish pins for the game zones
+  pinMode(PIN_START_ZONE, INPUT_PULLUP);
+  pinMode(PIN_FAIL_ZONE, INPUT_PULLUP);
+  pinMode(PIN_END_ZONE, INPUT_PULLUP);
+
+  // establish serial connection for debugging purposes
+  Serial.begin(9600);
+
+  setInitialGameState();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  switch (gameState) {
+    case GameState::INITIAL:
+      listenForGameReset();
+      break;
+    case GameState::IN_PROGRESS:
+      loopInProgressGameState();
+      break;
+    case GameState::FAILED:
+      listenForGameReset();
+      break;
+    case GameState::SUCCESS:
+      listenForGameReset();
+      break; 
+  }
+}
 
+/**
+ * Set everything up for the initial game state
+ */
+void setInitialGameState() {
+  setLedColorBlue();
+}
+
+/**
+ * Call when the game is in a state that requires the loop to
+ * be returned to the start zone
+ */
+void listenForGameReset() {
+  // check to see if the loop is touching the start zone
+  if (!digitalRead(PIN_START_ZONE)) {
+    // the loop is touching the start zone so change the game start
+    changeStateToInProgress();
+  }
+}
+
+/**
+ * Call this when in the in progress game state loop
+ */
+void loopInProgressGameState() {
+  // listen for a game state change
+  if (!digitalRead(PIN_END_ZONE)) {
+    // the loop is touching the end zone so the player was successful
+    changeStateToSuccess();
+  } else if (!digitalRead(PIN_FAIL_ZONE)) {
+    // the loop touched the pipe so the player was unsuccessful
+    changeStateToFailed();
+  }
+}
+
+void changeStateToInProgress() {
+  gameState = GameState::IN_PROGRESS;
+  setLedColorYellow();
+
+  // play tones to signify game start
+  tone(PIN_BUZZER, 975, 200);
+  delay(200);
+  tone(PIN_BUZZER, 1210, 800);
+  delay(800);
+  noTone(PIN_BUZZER);
+}
+
+void changeStateToFailed() {
+  gameState = GameState::FAILED;
+  setLedColorRed();
+
+  tone(PIN_BUZZER, 1000, 500);
+  delay(500);
+  tone(PIN_BUZZER, 925, 500);
+  delay(500);
+  tone(PIN_BUZZER, 850, 500);
+  delay(800);
+  noTone(PIN_BUZZER);
+}
+
+void changeStateToSuccess() {
+  gameState = GameState::SUCCESS;
+  setLedColorGreen();
+}
+
+void setLedColorYellow() {
+  setLedColor(50, 5, 0);
+}
+
+void setLedColorRed() {
+  setLedColor(50, 0, 0);
+}
+
+void setLedColorGreen() {
+  setLedColor(0, 5, 0);
+}
+
+void setLedColorBlue() {
+  setLedColor(0, 0, 50);
+}
+
+void setLedColorOff() {
+  setLedColor(0, 0, 0);
+}
+
+void setLedColor(int red, int green, int blue) {
+  analogWrite(PIN_LED_RED, red);
+  analogWrite(PIN_LED_GREEN, green);
+  analogWrite(PIN_LED_BLUE, blue);
 }

@@ -22,7 +22,7 @@ const byte PIN_END_ZONE = 6;
 
 GameState gameState = GameState::INITIAL;
 Chrono ledTimer;
-byte ledBlinkState = LOW;
+byte ledBlinkState = HIGH;
 
 void setup() {
   // establish pins for the RGB LED
@@ -48,6 +48,7 @@ void loop() {
   switch (gameState) {
     case GameState::INITIAL:
       listenForGameReset();
+      loopInitialGameState();
       break;
     case GameState::IN_PROGRESS:
       loopInProgressGameState();
@@ -66,26 +67,35 @@ void loop() {
  */
 void setInitialGameState() {
   Serial.write("In initial game state\n");
-  //setLedColorBlue();
 
-  // blink led yellow
+  // make sure player is not in start area before playing tone
+  if (digitalRead(PIN_START_ZONE)) {
+    setLedColorBlue();
+    
+    // play tones to signify game start
+    tone(PIN_BUZZER, 975, 500);
+    delay(500);
+    noTone(PIN_BUZZER);
+  }
+}
+
+/**
+ * Blink the LED to let the player know that they need to move the loop to the start zone
+ */
+void loopInitialGameState() {
+  // blink led blue
   if (ledTimer.hasPassed(1000)) {
     ledTimer.restart();
-
+    
     if (ledBlinkState == HIGH) {
       // led is already on so turn it off
       setLedColorOff();
       ledBlinkState = LOW;
     } else {
-      setLedColorYellow();
+      setLedColorBlue();
       ledBlinkState = HIGH;
     }
   }
-  
-  // play tones to signify game start
-  tone(PIN_BUZZER, 975, 500);
-  delay(500);
-  noTone(PIN_BUZZER);
 }
 
 /**
@@ -121,9 +131,10 @@ void loopInProgressGameState() {
  * Call this when the loop is in the start zone while a game isn't already in progress
  */
 void changeStateToInProgress() {
+  ledTimer.stop();
   gameState = GameState::IN_PROGRESS;
   Serial.write("State set to in progress\n");
-  setLedColorYellow();
+  setLedColorBlue();
 
   // play tones to signify game start
   tone(PIN_BUZZER, 975, 200);
@@ -131,9 +142,6 @@ void changeStateToInProgress() {
   tone(PIN_BUZZER, 1210, 800);
   delay(800);
   noTone(PIN_BUZZER);
-
-  delay(500);
-  setLedColorOff();
 }
 
 /**
@@ -181,7 +189,7 @@ void setLedColorYellow() {
 }
 
 void setLedColorRed() {
-  setLedColor(50, 0, 0);
+  setLedColor(255, 0, 0);
 }
 
 void setLedColorGreen() {

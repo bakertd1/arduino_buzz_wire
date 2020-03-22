@@ -184,16 +184,12 @@ void changeStateToSuccess() {
   noTone(PIN_BUZZER);
 }
 
-void setLedColorYellow() {
-  setLedColor(255, 25, 0);
-}
-
 void setLedColorRed() {
   setLedColor(255, 0, 0);
 }
 
 void setLedColorGreen() {
-  setLedColor(0, 5, 0);
+  setLedColor(0, 50, 0);
 }
 
 void setLedColorBlue() {

@@ -1,3 +1,8 @@
+// INCLUDE CHRONO LIBRARY
+// Documentation : https://github.com/SofaPirate/Chrono-Arduino-Wiring/blob/master/README.md
+// Download : https://github.com/SofaPirate/Chrono-Arduino-Wiring/archive/master.zip
+#include <Chrono.h>
+
 enum GameState {
   INITIAL,
   FAILED,
@@ -16,6 +21,8 @@ const byte PIN_FAIL_ZONE = 5;
 const byte PIN_END_ZONE = 6;
 
 GameState gameState = GameState::INITIAL;
+Chrono ledTimer;
+byte ledBlinkState = LOW;
 
 void setup() {
   // establish pins for the RGB LED
@@ -59,7 +66,22 @@ void loop() {
  */
 void setInitialGameState() {
   Serial.write("In initial game state\n");
-  setLedColorBlue();
+  //setLedColorBlue();
+
+  // blink led yellow
+  if (ledTimer.hasPassed(1000)) {
+    ledTimer.restart();
+
+    if (ledBlinkState == HIGH) {
+      // led is already on so turn it off
+      setLedColorOff();
+      ledBlinkState = LOW;
+    } else {
+      setLedColorYellow();
+      ledBlinkState = HIGH;
+    }
+  }
+  
   // play tones to signify game start
   tone(PIN_BUZZER, 975, 500);
   delay(500);

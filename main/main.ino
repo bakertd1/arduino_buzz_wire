@@ -14,7 +14,7 @@ const byte PIN_LED_RED = 11;
 const byte PIN_LED_GREEN = 10;
 const byte PIN_LED_BLUE = 9;
 
-const byte PIN_BUZZER = 3;
+const byte PIN_BUZZER = 8;
 
 const byte PIN_START_ZONE = 4;
 const byte PIN_FAIL_ZONE = 5;

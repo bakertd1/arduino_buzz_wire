@@ -1,6 +1,6 @@
 // INCLUDE CHRONO LIBRARY
-// Documentation : https://github.com/SofaPirate/Chrono-Arduino-Wiring/blob/master/README.md
-// Download : https://github.com/SofaPirate/Chrono-Arduino-Wiring/archive/master.zip
+// Documentation : https://github.com/SofaPirate/Chrono/blob/master/README.md
+// Download : https://github.com/SofaPirate/Chrono/archive/master.zip
 #include <Chrono.h>
 
 enum GameState {

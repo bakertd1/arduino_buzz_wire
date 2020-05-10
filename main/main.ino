@@ -14,11 +14,13 @@ const byte PIN_LED_RED = 11;
 const byte PIN_LED_GREEN = 10;
 const byte PIN_LED_BLUE = 9;
 
-const byte PIN_BUZZER = 3;
+const byte PIN_BUZZER = 8;
 
 const byte PIN_START_ZONE = 2;
 const byte PIN_FAIL_ZONE = 3;
 const byte PIN_END_ZONE = 4;
+
+const byte VERIFY_PIN_DELAY_IN_MS = 20;
 
 GameState gameState = GameState::INITIAL;
 Chrono ledTimer;
@@ -104,7 +106,7 @@ void loopInitialGameState() {
  */
 void listenForGameReset() {
   // check to see if the loop is touching the start zone
-  if (!digitalRead(PIN_START_ZONE)) {
+  if (!digitalRead(PIN_START_ZONE) && verifyPinGrounded(PIN_START_ZONE)) {
     // the loop is touching the start zone so change the game start
     Serial.write("Game reset\n");
     changeStateToInProgress();
@@ -116,11 +118,11 @@ void listenForGameReset() {
  */
 void loopInProgressGameState() {
   // listen for a game state change
-  if (!digitalRead(PIN_END_ZONE)) {
+  if (!digitalRead(PIN_END_ZONE) && verifyPinGrounded(PIN_END_ZONE)) {
     // the loop is touching the end zone so the player was successful
     Serial.write("Player won\n");
     changeStateToSuccess();
-  } else if (!digitalRead(PIN_FAIL_ZONE)) {
+  } else if (!digitalRead(PIN_FAIL_ZONE) && verifyPinGrounded(PIN_FAIL_ZONE)) {
     // the loop touched the pipe so the player was unsuccessful
     Serial.write("Player lost\n");
     changeStateToFailed();
@@ -182,6 +184,13 @@ void changeStateToSuccess() {
   tone(PIN_BUZZER, 1600, 800);
   delay(800);
   noTone(PIN_BUZZER);
+}
+
+bool verifyPinGrounded(byte pin) {
+  // wait to make sure pin is grounded to prevent false positives
+  delay(VERIFY_PIN_DELAY_IN_MS);
+  return !digitalRead(pin);
+  //return true;
 }
 
 void setLedColorRed() {

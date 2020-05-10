@@ -16,9 +16,9 @@ const byte PIN_LED_BLUE = 9;
 
 const byte PIN_BUZZER = 3;
 
-const byte PIN_START_ZONE = 4;
-const byte PIN_FAIL_ZONE = 5;
-const byte PIN_END_ZONE = 6;
+const byte PIN_START_ZONE = 2;
+const byte PIN_FAIL_ZONE = 3;
+const byte PIN_END_ZONE = 4;
 
 GameState gameState = GameState::INITIAL;
 Chrono ledTimer;

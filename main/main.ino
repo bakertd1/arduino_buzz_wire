@@ -20,7 +20,7 @@ const byte PIN_START_ZONE = 2;
 const byte PIN_FAIL_ZONE = 3;
 const byte PIN_END_ZONE = 4;
 
-const byte VERIFY_PIN_DELAY_IN_MS = 20;
+const byte VERIFY_PIN_DELAY_IN_MS = 10;
 
 GameState gameState = GameState::INITIAL;
 Chrono ledTimer;
